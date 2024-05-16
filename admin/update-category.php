@@ -5,7 +5,7 @@ if($_SESSION['role']=='0') header("Location: {$host_name}/admin/post.php");
 $category_id = $_GET['category_id'];
 
 if(isset($_POST['sumbit'])){
-  $category_name = $_POST['cat_name'];
+  $category_name = $conn->real_escape_string($_POST['cat_name']);
 
   $update_category_sql = "UPDATE category SET category_name='{$category_name}' WHERE category_id = '{$category_id}'";
 
