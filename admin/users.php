@@ -1,5 +1,10 @@
-<?php include "header.php"; 
-include "../constants/config.php"; 
+<?php 
+include "header.php"; 
+
+if($_SESSION['role']=='0'){
+  header("Location: {$host_name}/admin/post.php");
+}
+
 ?>
 <div id="admin-content">
   <div class="container">
@@ -11,14 +16,9 @@ include "../constants/config.php";
         <a class="add-new" href="add-user.php">add user</a>
       </div>
       <div class="col-md-12">
-        <?php 
-            if(count($_GET)){
-                if($_GET['page']) $active_page = $_GET['page'];
-                else $active_page = 1;
-            }else{
-                $active_page = 1;
-            }
-           
+        <?php
+            $active_page = isset($_GET['page'])? $_GET['page']: 1;
+
             $data_per_page = 5;
 
             $offset = ($active_page-1) * $data_per_page;
@@ -91,7 +91,6 @@ include "../constants/config.php";
     </div>
   </div>
 </div>
-<?php include "header.php"; 
-
+<?php
 $conn->close();
 ?>

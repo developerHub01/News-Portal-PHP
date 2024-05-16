@@ -1,3 +1,12 @@
+<?php
+include "../constants/config.php";
+
+session_start();
+
+if(isset( $_SESSION['username']) && isset( $_SESSION['user_id']) && isset( $_SESSION['role'])) header("Location: {$host_name}/admin/post.php");
+
+?>
+
 <!doctype html>
 <html>
    <head>
@@ -18,7 +27,7 @@
                         <img class="logo" src="images/news.jpg">
                         <h3 class="heading">Admin</h3>
                         <!-- Form Start -->
-                        <form  action="" method ="POST">
+                        <form  action="<?php $_SERVER['PHP_SELF']?>" method ="POST">
                             <div class="form-group">
                                 <label>Username</label>
                                 <input type="text" name="username" class="form-control" placeholder="" required>
@@ -30,6 +39,33 @@
                             <input type="submit" name="login" class="btn btn-primary" value="login" />
                         </form>
                         <!-- /Form  End -->
+
+                        <?php 
+                        if(isset($_POST['login'])){
+                            include "../constants/config.php";
+
+                            $username = $conn->real_escape_string($_POST['username']);
+                            $password = $conn->real_escape_string(md5($_POST['password']));
+
+                            $sql = "SELECT user_id, username, role FROM user WHERE username='{$username}' AND password = '{$password}'";
+
+                            $result = $conn->query($sql) or die("Query Faild");
+
+                            print_r($result);
+
+                            if($result->num_rows){
+                                while($row = $result->fetch_assoc()){
+                                    session_start();
+                                    $_SESSION['username']= $row['username'];
+                                    $_SESSION['user_id']= $row['user_id'];
+                                    $_SESSION['role']= $row['role'];
+
+                                    header("Location: {$host_name}/admin/post.php");
+                                }
+                            }
+                        }
+                        
+                        ?>
                     </div>
                 </div>
             </div>

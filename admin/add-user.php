@@ -1,22 +1,21 @@
 <?php 
 include "header.php"; 
 
+if($_SESSION['role']=='0'){
+  header("Location: {$host_name}/admin/post.php");
+}
+
 if(isset($_POST['save'])){
-  include "../constants/config.php"; 
-  
     $f_name = $conn->real_escape_string($_POST['fname']);
     $l_name = $conn->real_escape_string($_POST['lname']);
     $user_name = $conn->real_escape_string($_POST['user']);
-    $password = $conn->real_escape_string(md5($_POST['password'], TRUE));
+    $password = $conn->real_escape_string(md5($_POST['password']));
     $role = $conn->real_escape_string($_POST['role']);
 
     $sql = "SELECT username FROM user WHERE username = '{$user_name}'";
-    
-    $is_successfull = FALSE;
 
     $result = $conn->query($sql) or die("Query Faild");
 
-    print_r($result);
     if($result->num_rows){
         echo "<h2>Username already exist</h2>";
     }else{
