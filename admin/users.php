@@ -1,4 +1,6 @@
-<?php include "header.php"; ?>
+<?php include "header.php"; 
+include "../constants/config.php"; 
+?>
 <div id="admin-content">
   <div class="container">
     <div class="row">
@@ -10,9 +12,18 @@
       </div>
       <div class="col-md-12">
         <?php 
-            include "../constants/config.php";
+            if(count($_GET)){
+                if($_GET['page']) $active_page = $_GET['page'];
+                else $active_page = 1;
+            }else{
+                $active_page = 1;
+            }
+           
+            $data_per_page = 5;
 
-            $sql = "SELECT * FROM user ORDER BY user_id DESC";
+            $offset = ($active_page-1) * $data_per_page;
+
+            $sql = "SELECT * FROM user ORDER BY user_id DESC LIMIT {$data_per_page} OFFSET {$offset}";
             
             $result = $conn->query($sql) or die("Query not successfull");
             
@@ -53,12 +64,34 @@
             }
         ?>
         <ul class='pagination admin-pagination'>
-          <li class=" active"><a>1</a></li>
-          <li><a>2</a></li>
-          <li><a>3</a></li>
+        <?php 
+        $pagination_sql = "SELECT COUNT(user_id) as totalPage FROM user";
+
+        $total_user = $conn->query($pagination_sql) or die("Query not successfull");
+
+        $total_user = $total_user->fetch_assoc();
+
+        $total_user = $total_user['totalPage'];
+        
+        $total_page = ceil($total_user/$data_per_page); 
+
+        if($total_page>1){
+            for($page_num = 1; $page_num<=$total_page; $page_num++){
+                $active_class = $active_page==$page_num? 'active': '';
+                echo "<li class='{$active_class}'>
+                    <a href='users.php?page={$page_num}'>
+                        {$page_num}
+                    </a>
+                </li>";
+            }
+        }
+        ?>
         </ul>
       </div>
     </div>
   </div>
 </div>
-<?php include "header.php"; ?>
+<?php include "header.php"; 
+
+$conn->close();
+?>
