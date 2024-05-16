@@ -15,6 +15,7 @@ if(isset($_POST['submit'])){
 
     if($result) && header("Location: {$host_name}/admin/users.php");
     
+    $conn->close();
 }
 
 ?>
