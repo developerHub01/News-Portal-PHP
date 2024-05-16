@@ -1,6 +1,6 @@
 <?php include "header.php"; 
 
-$row_per_page = 4;
+$row_per_page = 5;
 
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 
