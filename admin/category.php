@@ -32,11 +32,12 @@ $category_result = $conn->query($sql_category) or die("Query Failed");
                     <tbody>
                     <?php 
                         if($category_result->num_rows){
+                            $serial = (($current_page-1) * $row_per_page) + 1;
                             while($row = $category_result->fetch_assoc()){
                             ?>
                                 <tr>
                                     <td class='id'>
-                                        <?php echo $row['category_id'] ?>
+                                        <?php echo $serial++ ?>
                                     </td>
                                     <td>
                                         <?php echo $row['category_name'] ?>
