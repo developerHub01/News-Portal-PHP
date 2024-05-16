@@ -1,7 +1,15 @@
 <?php include "header.php"; 
 
-if($_SESSION['role']=='0'){
-  header("Location: {$host_name}/admin/post.php");
+if($_SESSION['role']=='0') header("Location: {$host_name}/admin/post.php");
+
+if(isset($_POST['save'])){
+    $category = $conn->real_escape_string($_POST['cat']);
+    
+    $sql = "INSERT INTO category (category_name) VALUES ('{$category}')";
+
+    $result = $conn->query($sql) or die("Query failed");
+
+    if($result) header("Location: ${host_name}/admin/category.php");
 }
 
 ?>
@@ -13,7 +21,7 @@ if($_SESSION['role']=='0'){
               </div>
               <div class="col-md-offset-3 col-md-6">
                   <!-- Form Start -->
-                  <form action="" method="POST" autocomplete="off">
+                  <form action="<?php $_SERVER['PHP_SELF']?>" method="POST" autocomplete="off">
                       <div class="form-group">
                           <label>Category Name</label>
                           <input type="text" name="cat" class="form-control" placeholder="Category Name" required>

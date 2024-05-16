@@ -1,6 +1,4 @@
 <?php
-include "../constants/config.php";
-
 session_start();
 
 if(isset( $_SESSION['username']) && isset( $_SESSION['user_id']) && isset( $_SESSION['role'])) header("Location: {$host_name}/admin/post.php");
@@ -50,8 +48,6 @@ if(isset( $_SESSION['username']) && isset( $_SESSION['user_id']) && isset( $_SES
                             $sql = "SELECT user_id, username, role FROM user WHERE username='{$username}' AND password = '{$password}'";
 
                             $result = $conn->query($sql) or die("Query Faild");
-
-                            print_r($result);
 
                             if($result->num_rows){
                                 while($row = $result->fetch_assoc()){

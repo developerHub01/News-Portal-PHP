@@ -65,13 +65,13 @@ if($_SESSION['role']=='0'){
         ?>
         <ul class='pagination admin-pagination'>
         <?php 
-        $pagination_sql = "SELECT COUNT(user_id) as totalPage FROM user";
+        $pagination_sql = "SELECT COUNT(user_id) as total_page FROM user";
 
         $total_user = $conn->query($pagination_sql) or die("Query not successfull");
 
         $total_user = $total_user->fetch_assoc();
 
-        $total_user = $total_user['totalPage'];
+        $total_user = $total_user['total_page'];
         
         $total_page = ceil($total_user/$data_per_page); 
 
