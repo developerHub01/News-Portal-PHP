@@ -24,7 +24,7 @@ if(isset($_POST['save'])){
 
         $result = $conn->query($sql) or die("Query Faild");
         
-        if($result) header("Location: http://localhost/web/news-portal/admin/users.php") ;
+        if($result) header("Location: {$host_name}/admin/users.php") ;
     }
 }
 
