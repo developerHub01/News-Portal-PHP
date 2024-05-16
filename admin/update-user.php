@@ -10,7 +10,6 @@ if(isset($_POST['submit'])){
 
     $sql = "UPDATE user SET first_name='{$first_name}', last_name='{$last_name}', username='{$username}', role='{$role}' WHERE user_id = {$user_id}";
 
-    echo $sql;
     $result = $conn->query($sql) or die("Query Failed");
 
     if($result) && header("Location: {$host_name}/admin/users.php");

@@ -1,31 +1,8 @@
-<?php include "header.php"; 
+<?php 
+include "header.php"; 
+include "../utils/upload_image.php"; 
 
-if(isset($_FILES['fileToUpload'])){
-    $error = [];
-
-    $file_name = $_FILES['fileToUpload']['name'];
-    $file_size = $_FILES['fileToUpload']['size'];
-    $file_temp_name = $_FILES['fileToUpload']['tmp_name'];
-    $file_type = $_FILES['fileToUpload']['type'];
-    $file_extension = strtolower(end(explode(".", $file_name)));
-
-    $allowed_extensions = ['jpeg', 'jpg', 'png'];
-
-    if(!in_array($file_extension, $allowed_extensions)){
-        $error[] = "Extension not supported.";
-    }
-    if($file_size > 2*1024*1024){
-        $error[] = "Max file size 2MB";
-    }
-
-    if(empty($error)){
-        move_uploaded_file($file_temp_name, "./upload/" . $file_name);
-    }else{
-        print_r($error);
-        die();
-    }
-}
-
+$file_name = upload_image("fileToUpload");
 
 if(isset($_POST['submit'])){
     $post_title = $conn->real_escape_string($_POST['post_title']);
