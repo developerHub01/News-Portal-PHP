@@ -45,9 +45,17 @@ $category_list = $conn->query($category_sql) or die("Query Failed");
         <div class="col-md-12">
           <ul class='menu'>
             <?php 
-            while($row = $category_list->fetch_assoc()){?>
+            $is_category = $_SERVER['PHP_SELF'];
+            $is_category = explode('/', $_SERVER['PHP_SELF']);
+            $is_category = end($is_category);
+            $active_category_id = null;
+            if(isset($_GET['id']) && $is_category=="category.php") $active_category_id = $_GET['id'];
+
+            while($row = $category_list->fetch_assoc()){
+              $active_class = $active_category_id==$row['category_id']? "active": "";
+              ?>
                 <li>
-                  <a href='category.php?id=<?php echo $row['category_id']; ?>'>
+                  <a href='category.php?id=<?php echo $row['category_id']; ?>' class="<?php echo $active_class; ?>" >
                     <?php echo $row['category_name']; ?>
                   </a>
                 </li>
