@@ -65,7 +65,9 @@ $current_page = isset($_GET['page'])? $_GET['page']: 1;
                                             </span>
                                             <span>
                                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                                <?php echo $row['username']?>
+                                                <a href='author.php?username=<?php echo $row['username']?>'>
+                                                    <?php echo $row['username']?>
+                                                </a>
                                             </span>
                                             <span>
                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -96,8 +98,6 @@ $current_page = isset($_GET['page'])? $_GET['page']: 1;
                         }
                     }else echo "<h1>No post available</h1>";
                     ?>
-                    
-                    
                 </div>
             </div>
             <?php include 'sidebar.php'; ?>

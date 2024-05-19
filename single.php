@@ -33,7 +33,7 @@ if(!$post_result || !$post_result->num_rows) return header("Location: {$host_nam
                                 </span>
                                 <span>
                                     <i class="fa fa-user" aria-hidden="true"></i>
-                                    <a href='author.php'>
+                                    <a href='author.php?username=<?php echo $row['username']?>'>
                                         <?php echo $row['username'] ?>
                                     </a>
                                 </span>
