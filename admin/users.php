@@ -4,6 +4,10 @@ include "header.php";
 if($_SESSION['role']=='0'){
   header("Location: {$host_name}/admin/post.php");
 }
+$row_per_page = 5;
+$current_page = isset($_GET['page'])? $_GET['page']: 1;
+
+$offset = ($current_page-1) * $row_per_page;
 
 ?>
 <div id="admin-content">
@@ -40,11 +44,12 @@ if($_SESSION['role']=='0'){
           </thead>
           <tbody>
             <?php 
+            $serial = (($current_page-1) * $row_per_page) + 1;
             while($row = $result->fetch_assoc()){
             ?>
             <tr>
               <td class='id'>
-                <?php echo $row['user_id']; ?>
+                <?php echo $serial++; ?>
               </td>
               <td>
                 <?php echo ucwords($row['first_name'] . " ". $row['last_name']); ?>

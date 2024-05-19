@@ -83,8 +83,8 @@ img.logo{
 }
 
 #admin-menubar .admin-menu li a:hover{
-    color: #fff;
-    background-color: #1E90FF;
+    color: #fff !important;
+    background-color: #1E90FF !important;
 }
 
 #admin-content{
@@ -541,3 +541,8 @@ i.fa{
 /* ===================== */
 /* FrontEnd CSS END */
 /* ===================== */
+
+.admin-menu li a.active{
+    color: #fff !important;
+    background-color: #1E90FF !important;
+}

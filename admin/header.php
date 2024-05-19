@@ -5,6 +5,7 @@ session_start();
 
 if(!isset( $_SESSION['username']) || !isset( $_SESSION['user_id']) || !isset( $_SESSION['role'])) header("Location: {$host_name}/admin");
 
+$active_page = explode(".php", basename($_SERVER['PHP_SELF']))[0];
 ?>
 
 
@@ -51,16 +52,16 @@ if(!isset( $_SESSION['username']) || !isset( $_SESSION['user_id']) || !isset( $_
                     <div class="col-md-12">
                        <ul class="admin-menu">
                             <li>
-                                <a href="post.php">Post</a>
+                                <a href="post.php" class="<?php echo $active_page=="post"?'active': '' ?>">Post</a>
                             </li>
 
                             <?php 
                             if($_SESSION['role']=='1'){?>
                             <li>
-                                <a href="category.php">Category</a>
+                                <a href="category.php" class="<?php echo $active_page=="category"?'active': '' ?>">Category</a>
                             </li>
                             <li>
-                                <a href="users.php">Users</a>
+                                <a href="users.php" class="<?php echo $active_page=="users"?'active': '' ?>">Users</a>
                             </li>
                             <?php }?>
                         </ul>

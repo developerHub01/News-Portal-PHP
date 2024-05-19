@@ -1,4 +1,5 @@
 <?php
+include "../constants/config.php";
 session_start();
 
 if(isset( $_SESSION['username']) && isset( $_SESSION['user_id']) && isset( $_SESSION['role'])) header("Location: {$host_name}/admin/post.php");
@@ -40,8 +41,6 @@ if(isset( $_SESSION['username']) && isset( $_SESSION['user_id']) && isset( $_SES
 
                         <?php 
                         if(isset($_POST['login'])){
-                            include "../constants/config.php";
-
                             $username = $conn->real_escape_string($_POST['username']);
                             $password = $conn->real_escape_string(md5($_POST['password']));
 
@@ -60,7 +59,6 @@ if(isset( $_SESSION['username']) && isset( $_SESSION['user_id']) && isset( $_SES
                                 }
                             }
                         }
-                        
                         ?>
                     </div>
                 </div>

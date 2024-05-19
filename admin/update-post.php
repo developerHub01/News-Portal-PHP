@@ -4,25 +4,34 @@ include "../utils/upload_image.php";
 $file_name = upload_image("new-image");
 
 $post_id = $_GET['post_id'];
+
+$sql = "SELECT post_id FROM post WHERE post_id={$post_id} AND author={$_SESSION['user_id']}";
+
+$result = $conn->query($sql) or die("Query failed.");
+
+if(!$result->num_rows && $_SESSION['role']==0) header("Location: {$host_name}/admin/post.php");
+
 $user_id = $_SESSION['user_id'];
 $user_role = $_SESSION['role'];
-
 
 if(isset($_POST['submit'])){
     $post_previous_image = $conn->real_escape_string($_POST['post_previous_image']);
     $post_title = $conn->real_escape_string($_POST['post_title']);
     $post_description = $conn->real_escape_string($_POST['postdesc']);
-    $post_category = $conn->real_escape_string($_POST['category']);
+    $post_category = $conn->real_escape_string($_POST['category']); 
+    $previous_category = $conn->real_escape_string($_POST['previous_category']);
 
     $is_post_image = $file_name? ", post_img="."'{$file_name}'" : "";
 
     if($file_name) if(file_exists("upload/{$post_previous_image}")) unlink("upload/{$post_previous_image}");
 
-    $sql = "UPDATE post SET title='{$post_title}', description='{$post_description}', category='{$post_category}' {$is_post_image} WHERE post_id = {$post_id}";
+    $sql = "UPDATE post SET title='{$post_title}', description='{$post_description}', category='{$post_category}' {$is_post_image} WHERE post_id = {$post_id};";
+    if($post_category != $previous_category){
+        $sql .= "UPDATE category SET post = post - 1 WHERE category_id = {$previous_category};";
+        $sql .= "UPDATE category SET post = post + 1 WHERE category_id = {$post_category};";
+    }
 
-    $result = $conn->query($sql);
-
-    if($result) header("Location: {$host_name}/admin/post.php");
+    if($conn->multi_query($sql)) header("Location: {$host_name}/admin/post.php");
 }
 
 ?>
@@ -46,11 +55,11 @@ if(isset($_POST['submit'])){
                 header("Location: {$host_name}/admin/post.php");
                 exit("");
             }else {
-                while($row = $post_result->fetch_assoc()){
-                    ?>
+                while($row = $post_result->fetch_assoc()){ ?>
                     <div class="form-group">
                         <label for="exampleInputTile">Title</label>
                         <input type="text" name="post_title"  class="form-control" id="exampleInputUsername" value="<?php echo $row['title']?>">
+                        <input hidden type="hidden" name="previous_category"  class="form-control" id="exampleInputUsername" value="<?php echo $row['category']?>">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1"> Description</label>
