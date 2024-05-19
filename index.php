@@ -19,7 +19,7 @@ include 'header.php';
                     $post_offset = ($current_page-1)*$post_per_page;
 
 
-                    $post_sql = "SELECT post_id, title, description, post_date, post_img, first_name, last_name, category_id, category_name  FROM post LEFT JOIN user ON post.author = user.user_id LEFT JOIN category ON post.category = category.category_id  ORDER BY post_id DESC LIMIT $post_per_page OFFSET $post_offset";
+                    $post_sql = "SELECT post_id, title, description, post_date, post_img, username, category_id, category_name  FROM post LEFT JOIN user ON post.author = user.user_id LEFT JOIN category ON post.category = category.category_id  ORDER BY post_id DESC LIMIT $post_per_page OFFSET $post_offset";
 
                     $all_posts = $conn->query($post_sql) or die("Query Failed");
                     if($all_posts->num_rows){
@@ -51,7 +51,7 @@ include 'header.php';
                                             </span>
                                             <span>
                                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                                <?php echo ucwords("{$row['first_name']} {$row['last_name']}")?>
+                                                <?php echo $row['username']?>
                                             </span>
                                             <span>
                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -60,7 +60,7 @@ include 'header.php';
                                         </div>
                                         <p class="description">
                                             <?php echo(
-                                                substr($row['description'], 0, 20) . (strlen($row['description'])>=20?"...": "")
+                                                substr($row['description'], 0, 100) . (strlen($row['description'])>=100?"...": "")
                                             ); ?>
                                         </p>
                                         <a class='read-more pull-right' href='single.php?id=<?php echo $row['post_id']?>'>read more</a>

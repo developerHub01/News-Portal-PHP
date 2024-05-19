@@ -3,7 +3,7 @@
 if(!isset($_GET['id'])) return header("Location: {$host_name}");
 $post_id = $_GET['id'];
 
-$post_sql = "SELECT post_id, author, title, description, category_name, post_date, post_img, first_name, last_name 
+$post_sql = "SELECT post_id, author, title, description, category_name, post_date, post_img, username
         FROM post 
         LEFT JOIN category ON post.category = category.category_id
         LEFT JOIN user ON post.author = user.user_id
@@ -34,7 +34,7 @@ if(!$post_result || !$post_result->num_rows) return header("Location: {$host_nam
                                 <span>
                                     <i class="fa fa-user" aria-hidden="true"></i>
                                     <a href='author.php'>
-                                        <?php echo ucwords($row['first_name']. " " . $row['last_name']) ?>
+                                        <?php echo $row['username'] ?>
                                     </a>
                                 </span>
                                 <span>

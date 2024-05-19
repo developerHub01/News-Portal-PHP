@@ -33,7 +33,7 @@ $current_page = isset($_GET['page'])? $_GET['page']: 1;
                     $total_page = ceil($total_post/$post_per_page);
                     $post_offset = ($current_page-1)*$post_per_page;
 
-                    $category_post_sql = "SELECT * FROM post 
+                    $category_post_sql = "SELECT post_id, title, description, post_date, post_img, username, category_id, category_name FROM post 
                     LEFT JOIN category ON post.category=category.category_id 
                     LEFT JOIN user ON post.author = user.user_id
                     WHERE category={$category_id}  
@@ -65,7 +65,7 @@ $current_page = isset($_GET['page'])? $_GET['page']: 1;
                                             </span>
                                             <span>
                                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                                <?php echo ucwords("{$row['first_name']} {$row['last_name']}")?>
+                                                <?php echo $row['username']?>
                                             </span>
                                             <span>
                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -74,7 +74,7 @@ $current_page = isset($_GET['page'])? $_GET['page']: 1;
                                         </div>
                                         <p class="description">
                                             <?php echo(
-                                                substr($row['description'], 0, 20) . (strlen($row['description'])>=20?"...": "")
+                                                substr($row['description'], 0, 100) . (strlen($row['description'])>=100?"...": "")
                                             ); ?>
                                         </p>
                                         <a class='read-more pull-right' href='single.php?id=<?php echo $row['post_id']?>'>read more</a>
