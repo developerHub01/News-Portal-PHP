@@ -2,6 +2,7 @@
 
 if(!isset($_GET['id'])) return header("Location: {$host_name}");
 $category_id = $_GET['id'];
+$current_page = isset($_GET['page'])? $_GET['page']: 1;
 
 ?>
     <div id="main-content">
@@ -10,223 +11,94 @@ $category_id = $_GET['id'];
             <div class="col-md-8">
                 <!-- post-container -->
                 <div class="post-container">
-                  <h2 class="page-heading">Category Name</h2>
-                    <div class="post-content">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <a class="post-img" href="single.php"><img src="images/post-format.jpg" alt=""/></a>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="inner-content clearfix">
-                                    <h3><a href='single.php'>Lorem ipsum dolor sit amet, consectetur adipiscing elit</a></h3>
-                                    <div class="post-information">
-                                        <span>
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href='category.php'>PHP</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            <a href='author.php'>Admin</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            01 Nov, 2019
-                                        </span>
+                    <?php
+                    $category_name_sql = "SELECT category_name FROM category WHERE category_id={$category_id}";
+                    $category_name = $conn->query($category_name_sql) or die("Query Failed");
+
+                    $category_name = $category_name->fetch_assoc();
+                    $category_name = $category_name['category_name'];
+                    ?>
+                    <h2 class="page-heading">
+                        <?php echo strtoupper($category_name);?>
+                    </h2>
+
+                    <?php
+
+                    $post_per_page = 5;
+
+                    $total_post_sql = "SELECT post_id FROM post";
+                    $total_post = $conn->query($total_post_sql) or die("Query Failed");
+                    $total_post = $total_post->num_rows; 
+                    
+                    $total_page = ceil($total_post/$post_per_page);
+                    $post_offset = ($current_page-1)*$post_per_page;
+
+                    $category_post_sql = "SELECT * FROM post 
+                    LEFT JOIN category ON post.category=category.category_id 
+                    LEFT JOIN user ON post.author = user.user_id
+                    WHERE category={$category_id}  
+                    ORDER BY post_id DESC LIMIT $post_per_page OFFSET $post_offset";
+
+                    $category_posts = $conn->query($category_post_sql) or die("Query Failed");
+                    if($category_posts->num_rows){
+                        while($row = $category_posts->fetch_assoc()){?>
+                            <div class="post-content">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <a class="post-img" href='single.php?id=<?php echo $row['post_id']?>'>
+                                            <img src="./admin/upload/<?php echo $row['post_img']?>" alt=""/>
+                                        </a>
                                     </div>
-                                    <p class="description">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua....
-                                    </p>
-                                    <a class='read-more pull-right' href='single.php'>read more</a>
+                                <div class="col-md-8">
+                                    <div class="inner-content clearfix">
+                                        <h3>
+                                            <a href='single.php?id=<?php echo $row['post_id']?>'>
+                                                <?php echo ucwords($row['title'])?>
+                                            </a>
+                                        </h3>
+                                        <div class="post-information">
+                                            <span>
+                                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                                <a href='category.php?id=<?php echo $row['category_id']?>'>
+                                                    <?php echo strtoupper($row['category_name'])?>
+                                                </a>
+                                            </span>
+                                            <span>
+                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                                <?php echo ucwords("{$row['first_name']} {$row['last_name']}")?>
+                                            </span>
+                                            <span>
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                <?php echo $row['post_date']?>
+                                            </span>
+                                        </div>
+                                        <p class="description">
+                                            <?php echo(
+                                                substr($row['description'], 0, 20) . (strlen($row['description'])>=20?"...": "")
+                                            ); ?>
+                                        </p>
+                                        <a class='read-more pull-right' href='single.php?id=<?php echo $row['post_id']?>'>read more</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <a class="post-img" href="single.php"><img src="images/post_1.jpg" alt=""/></a>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="inner-content clearfix">
-                                    <h3><a href='single.php'>Lorem ipsum dolor sit amet, consectetur adipiscing elit</a></h3>
-                                    <div class="post-information">
-                                        <span>
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href='category.php'>PHP</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            <a href='author.php'>Admin</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            01 Nov, 2019
-                                        </span>
-                                    </div>
-                                    <p class="description">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua....
-                                    </p>
-                                    <a class='read-more pull-right' href='single.php'>read more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <a class="post-img" href="single.php"><img src="images/post-format.jpg" alt=""/></a>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="inner-content clearfix">
-                                    <h3><a href='single.php'>Lorem ipsum dolor sit amet, consectetur adipiscing elit</a></h3>
-                                    <div class="post-information">
-                                        <span>
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href='category'>PHP</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            <a href='author.php'>Admin</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            01 Nov, 2019
-                                        </span>
-                                    </div>
-                                    <p class="description">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua....
-                                    </p>
-                                    <a class='read-more pull-right' href='single.php'>read more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <a class="post-img" href="single.php"><img src="images/post_1.jpg" alt=""/></a>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="inner-content clearfix">
-                                    <h3><a href='single.php'>Lorem ipsum dolor sit amet, consectetur adipiscing elit</a></h3>
-                                    <div class="post-information">
-                                        <span>
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href='category.php'>PHP</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            <a href='author.php'>Admin</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            01 Nov, 2019
-                                        </span>
-                                    </div>
-                                    <p class="description">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua....
-                                    </p>
-                                    <a class='read-more pull-right' href='single.php'>read more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <a class="post-img" href="single.php"><img src="images/post-format.jpg" alt=""/></a>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="inner-content clearfix">
-                                    <h3><a href='single.php'>Lorem ipsum dolor sit amet, consectetur adipiscing elit</a></h3>
-                                    <div class="post-information">
-                                        <span>
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href='category.php'>PHP</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            <a href='author.php'>Admin</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            01 Nov, 2019
-                                        </span>
-                                    </div>
-                                    <p class="description">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua....
-                                    </p>
-                                    <a class='read-more pull-right' href='single.php'>read more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <a class="post-img" href="single.php"><img src="images/post_1.jpg" alt=""/></a>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="inner-content clearfix">
-                                    <h3><a href='single.php'>Lorem ipsum dolor sit amet, consectetur adipiscing elit</a></h3>
-                                    <div class="post-information">
-                                        <span>
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href='category.php'>PHP</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            <a href='author.php'>Admin</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            01 Nov, 2019
-                                        </span>
-                                    </div>
-                                    <p class="description">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua....
-                                    </p>
-                                    <a class='read-more pull-right' href='single.php'>read more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <a class="post-img" href="single.php"><img src="images/post-format.jpg" alt=""/></a>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="inner-content clearfix">
-                                    <h3><a href='single.php'>Lorem ipsum dolor sit amet, consectetur adipiscing elit</a></h3>
-                                    <div class="post-information">
-                                        <span>
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href='category.php'>PHP</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            <a href='author.php'>Admin</a>
-                                        </span>
-                                        <span>
-                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            01 Nov, 2019
-                                        </span>
-                                    </div>
-                                    <p class="description">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua....
-                                    </p>
-                                    <a class='read-more pull-right' href='single.php'>read more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <ul class='pagination'>
-                        <li class="active"><a href="">1</a></li>
-                        <li><a href="">2</a></li>
-                        <li><a href="">3</a></li>
-                    </ul>
-                </div><!-- /post-container -->
+                            <ul class='pagination'>
+                                <?php 
+                                    if($total_page>1){
+                                        for($page = 1; $page<=$total_page; $page++){
+                                            $active_class = $current_page==$page? 'active': '';
+                                            echo "<li class='{$active_class}'><a href='?page={$page}'>{$page}</a></li>";
+                                        }
+                                    }
+                                ?>
+                            </ul>
+                            <?php
+                        }
+                    }else echo "<h1>No post available</h1>";
+                    ?>
+                    
+                    
+                </div>
             </div>
             <?php include 'sidebar.php'; ?>
         </div>

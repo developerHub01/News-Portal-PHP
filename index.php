@@ -8,7 +8,7 @@ include 'header.php';
                     <!-- post-container -->
                     <?php 
 
-                    $current_page = isset($_GET['page'])? $_GET['page']: 0;
+                    $current_page = isset($_GET['page'])? $_GET['page']: 1;
                     $post_per_page = 5;
                     
                     $total_post_sql = "SELECT post_id FROM post";
@@ -73,14 +73,13 @@ include 'header.php';
                         ?>
                         <ul class='pagination'>
                             <?php 
-                            for($page = 1; $page<=$total_page; $page++){
-                                $active_class = $current_page==$page? 'active': '';
-                                echo "<li class='{$active_class}'><a href='?page={$page}'>{$page}</a></li>";
-                            }
+                                if($total_page>1){
+                                    for($page = 1; $page<=$total_page; $page++){
+                                        $active_class = $current_page==$page? 'active': '';
+                                        echo "<li class='{$active_class}'><a href='?page={$page}'>{$page}</a></li>";
+                                    }
+                                }
                             ?>
-<!--                             
-                            <li><a href="">2</a></li>
-                            <li><a href="">3</a></li> -->
                         </ul>
                     </div>
                     <?php
