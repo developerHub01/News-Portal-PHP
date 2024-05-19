@@ -1,7 +1,7 @@
 <?php include 'header.php'; 
 
 if(!isset($_GET['id'])) return header("Location: {$host_name}");
-$category_id = $_GET['id'];
+$category_id = $conn->real_escape_string($_GET['id']);
 $current_page = isset($_GET['page'])? $_GET['page']: 1;
 
 ?>
@@ -84,6 +84,9 @@ $current_page = isset($_GET['page'])? $_GET['page']: 1;
                                     </div>
                                 </div>
                             </div>
+                            <?php
+                        }
+                        ?>
                             <ul class='pagination'>
                                 <?php 
                                     if($total_page>1){
@@ -94,8 +97,7 @@ $current_page = isset($_GET['page'])? $_GET['page']: 1;
                                     }
                                 ?>
                             </ul>
-                            <?php
-                        }
+                        <?php
                     }else echo "<h1>No post available</h1>";
                     ?>
                 </div>
