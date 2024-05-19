@@ -1,9 +1,44 @@
 <?php 
 include "./constants/config.php";
 
-$category_sql = "SELECT category_id, category_name FROM category";
+$main_title = "News Portal";
 
+$category_sql = "SELECT category_id, category_name FROM category";
 $category_list = $conn->query($category_sql) or die("Query Failed");
+
+$page_name = basename($_SERVER['PHP_SELF']);
+
+switch($page_name){
+  case "category.php":
+    if(isset($_GET['id'])){
+      $sql = "SELECT category_name FROM category WHERE category_id = {$_GET['id']}";
+      $result = $conn->query($sql);
+      $result = $result->fetch_assoc()['category_name'];
+      $main_title = strtoupper($result) . " Category";
+    }else $main_title = "Category";
+    break;
+  case "single.php":
+    if(isset($_GET['id'])){
+      $sql = "SELECT title FROM post WHERE post_id = {$_GET['id']}";
+      $result = $conn->query($sql);
+      $result = $result->fetch_assoc()['title'];
+      $main_title = ucwords($result);
+    }else $main_title = "Post page";
+    break;
+  case "search.php":
+    if(isset($_GET['search'])){
+      $main_title = ucwords($_GET['search']) . "-Search";
+    }else $main_title = "Search Page";
+    break;
+  case "author.php":
+    if(isset($_GET['username'])) $main_title = $_GET['username'] . "'s post";
+    else $main_title = "Author";
+    break;
+  default:
+    $main_title = "News Portal";
+    break;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +48,7 @@ $category_list = $conn->query($category_sql) or die("Query Failed");
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>News</title>
+  <title><?php echo $main_title ?></title>
   <!-- Bootstrap -->
   <link rel="stylesheet" href="css/bootstrap.min.css" />
   <!-- Font Awesome Icon -->
