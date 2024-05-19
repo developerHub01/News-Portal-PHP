@@ -26,7 +26,7 @@ $current_page = isset($_GET['page'])? $_GET['page']: 1;
 
                     $post_per_page = 5;
 
-                    $total_post_sql = "SELECT post_id FROM post";
+                    $total_post_sql = "SELECT post_id FROM post WHERE category = {$category_id}";
                     $total_post = $conn->query($total_post_sql) or die("Query Failed");
                     $total_post = $total_post->num_rows; 
                     
@@ -92,7 +92,7 @@ $current_page = isset($_GET['page'])? $_GET['page']: 1;
                                     if($total_page>1){
                                         for($page = 1; $page<=$total_page; $page++){
                                             $active_class = $current_page==$page? 'active': '';
-                                            echo "<li class='{$active_class}'><a href='?page={$page}'>{$page}</a></li>";
+                                            echo "<li class='{$active_class}'><a href='?id={$category_id}&page={$page}'>{$page}</a></li>";
                                         }
                                     }
                                 ?>
