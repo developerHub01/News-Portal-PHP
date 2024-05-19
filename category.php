@@ -1,4 +1,9 @@
-<?php include 'header.php'; ?>
+<?php include 'header.php'; 
+
+if(!isset($_GET['id'])) return header("Location: {$host_name}");
+$category_id = $_GET['id'];
+
+?>
     <div id="main-content">
       <div class="container">
         <div class="row">

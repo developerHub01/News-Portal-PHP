@@ -1,3 +1,10 @@
+<?php 
+include "./constants/config.php";
+
+$category_sql = "SELECT category_id, category_name FROM category";
+
+$category_list = $conn->query($category_sql) or die("Query Failed");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,10 +44,14 @@
       <div class="row">
         <div class="col-md-12">
           <ul class='menu'>
-            <li><a href='category.php'>Business</a></li>
-            <li><a href='category.php'>Entertainment</a></li>
-            <li><a href='category.php'>Sports</a></li>
-            <li><a href='category.php'>Politics</a></li>
+            <?php 
+            while($row = $category_list->fetch_assoc()){?>
+                <li>
+                  <a href='category.php?id=<?php echo $row['category_id']; ?>'>
+                    <?php echo $row['category_name']; ?>
+                  </a>
+                </li>
+            <?php } ?>
           </ul>
         </div>
       </div>

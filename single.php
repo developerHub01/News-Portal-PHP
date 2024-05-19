@@ -1,32 +1,56 @@
-<?php include 'header.php'; ?>
+<?php include 'header.php'; 
+
+if(!isset($_GET['id'])) return header("Location: {$host_name}");
+$post_id = $_GET['id'];
+
+$post_sql = "SELECT post_id, author, title, description, category_name, post_date, post_img, first_name, last_name 
+        FROM post 
+        LEFT JOIN category ON post.category = category.category_id
+        LEFT JOIN user ON post.author = user.user_id
+        WHERE post_id = {$post_id}";
+    
+$post_result = $conn->query($post_sql) or die("Query Failed");
+
+if(!$post_result || !$post_result->num_rows) return header("Location: {$host_name}");
+?>
     <div id="main-content">
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
                   <!-- post-container -->
+                  <?php
+                  while($row = $post_result->fetch_assoc()){
+                  ?>
                     <div class="post-container">
                         <div class="post-content single-post">
-                            <h3>Lorem ipsum dolor sit amet, consectetur</h3>
+                            <h3>
+                                <?php echo ucwords($row['title'])?>
+                            </h3>
                             <div class="post-information">
                                 <span>
                                     <i class="fa fa-tags" aria-hidden="true"></i>
-                                    Html
+                                    <?php echo $row['category_name']?>
                                 </span>
                                 <span>
                                     <i class="fa fa-user" aria-hidden="true"></i>
-                                    <a href='author.php'>Admin</a>
+                                    <a href='author.php'>
+                                        <?php echo ucwords($row['first_name']. " " . $row['last_name']) ?>
+                                    </a>
                                 </span>
                                 <span>
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    01 Nov, 2019
+                                    <?php echo $row['post_date'] ?>
                                 </span>
                             </div>
-                            <img class="single-feature-image" src="images/post_1.jpg" alt=""/>
+                            <img class="single-feature-image" src="admin/upload/<?php echo $row['post_img']; ?>" alt=""/>
                             <p class="description">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                                <?php echo $row['description'] ?>
                             </p>
                         </div>
                     </div>
+                  <?php 
+                  }
+                  ?>
                     <!-- /post-container -->
                 </div>
                 <?php include 'sidebar.php'; ?>

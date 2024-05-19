@@ -86,7 +86,7 @@ $offset = ($current_page-1) * $row_per_page;
                   <ul class='pagination admin-pagination'>
                     <?php 
                     $total_post_sql = "SELECT COUNT(post_id) as total_post FROM post;";
-                        
+                    
                     $total_post_number = $conn->query($total_post_sql) or die("Query failed");
                     $total_post_number = ($total_post_number->fetch_assoc())['total_post'];
 
