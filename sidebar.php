@@ -15,9 +15,8 @@
     <!-- recent posts box -->
     <div class="recent-post-container">
         <h4>Recent Posts</h4>
-        
-        <pre>
         <?php 
+        
         $current_page = $_SERVER['PHP_SELF'];
         $current_page = explode("/", $current_page);
         $current_page = end($current_page);
@@ -25,10 +24,7 @@
         if(isset($_GET['id']) && $current_page=="single.php"){
             $active_blog_id = $_GET['id'];
         }
-        ?>
-        </pre>
 
-        <?php 
         $recent_posts_sql = "SELECT * FROM post LEFT JOIN category ON post.category = category.category_id ORDER BY post_id DESC LIMIT 5";
         $recent_posts_list = $conn->query($recent_posts_sql) or die("Query Failed");
 
